@@ -5,7 +5,6 @@ Created on Mon Aug  7 12:04:49 2023
 @author: jlbraid, nrjost, bgpierc
 """
 import time as t
-#t0 = t.time() #timerimport numpy as np
 import matplotlib.pyplot as plt
 from skimage import io
 from skimage.transform import resize
@@ -15,9 +14,6 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader
-#from custom_dataset import CustomDataset
-#from termcolor import colored
-#from pytorch_ssim import SSIM #don't use pip installed version, is not maintained
 from torchvision import transforms
 
 
@@ -36,12 +32,8 @@ class Encoder(nn.Module):
         )
         
         hidden = 16384
-        #self.fc_mu = nn.Linear(256 * 25 * 25, latent_dim)
-        #self.fc_logvar = nn.Linear(256 * 25 * 25, latent_dim)
         self.fc_mu = nn.Linear(hidden, latent_dim)
         self.fc_logvar = nn.Linear(hidden, latent_dim)
-        #print(colored(self.fc_mu, 'green'))
-        #print(colored(self.fc_logvar, 'blue'))
     
     def forward(self, x):
         x = self.conv(x)
@@ -92,37 +84,10 @@ class VAE(nn.Module):
         x_recon = self.decoder(z)
         return x_recon, mu, logvar, z
 
-
-def vae_loss_ssim(recon_x, x, mu, logvar, bce_weight, kld_weight, ssim_weight):
-    #print(colored("Shape of x is", 'magenta'))
-    #print(colored(x.shape, 'magenta'))
-   # print(colored(("Shape of recon_x is"), 'cyan'))
-    #print(colored(recon_x.shape, 'cyan'))
-    # print(colored("Dtype of x is", 'light_magenta'))
-    # print(colored(x.dtype, 'light_magenta'))
-    # print(colored("Dtype of recon_x is", 'light_cyan'))
-    # print(colored(recon_x.dtype, 'light_cyan'))
-    recon_loss = nn.functional.binary_cross_entropy(recon_x.view(-1, 400*400), x.view(-1, 400*400), reduction='sum') #adapt to size of input array
-    # height, width = x.shape[-2], x.shape[-1]
-    # recon_x_resized = torch.nn.functional.interpolate(recon_x, size=(height, width), mode="bilinear", align_corners=False)
-    ssim_loss = SSIM(window_size=11)
-    ssimloss = 1 - ssim_loss(recon_x, x)
-    ssimloss = ssimloss.to(device)
-    kld_loss = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-    kld_loss = kld_loss.to(device)
-    #print("Current BCE loss =%f" % recon_loss)
-    #print("Current SSIM loss =%f" % ssimloss)
-   # print("Current KLD loss =%f" % kld_loss)
-    total_loss = (
-        bce_weight * recon_loss +
-        kld_weight * kld_loss +
-        ssim_weight * ssimloss
-    )
-    return total_loss
-
 def VAE_loss(recon_x, x, mu, logvar):
     batch, chan, h, w = x.shape
     recon_loss = nn.functional.binary_cross_entropy(recon_x.view(-1, h*w), x.view(-1, h*w), reduction='sum')
+    #recon_loss = torch.nn.functional.mse_loss(x, recon_x)
     kld_loss = -0.5 * torch.sum(1 + logvar - mu.pow(2) - logvar.exp())
-    return recon_loss + kld_loss
+    return recon_loss + kld_loss, recon_loss, kld_loss
     
