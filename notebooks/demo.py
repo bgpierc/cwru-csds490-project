@@ -34,8 +34,8 @@ use_pca=True
 dim=2
 model_type='gmm'
 
-train_path = "./data/1907French-etal-SDLE-EL-ImageDataSet-forML/train/"
-test_path = "./data/1907French-etal-SDLE-EL-ImageDataSet-forML/test/"
+train_path = "../data/1907French-etal-SDLE-EL-ImageDataSet-forML/train/"
+test_path = "../data/1907French-etal-SDLE-EL-ImageDataSet-forML/test/"
 
 
 #%% train the algorithm
