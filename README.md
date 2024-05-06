@@ -11,3 +11,9 @@ Previous works have explored the possibilities of using convolutional neural net
 In this work, we introduce a unsupervised convolutional auto-encoder (CAE) model, and compare it to a classical unsupervised image processing approach. 
 We will show that unsupervised approaches can attain very good accuracy scores on multiple EL image datasets without the need for costly training data with labels.
 
+# Usage
+## Autoencoder
+To run the autoencoder, see `notebooks/bgp-vae-example.ipynb`
+## Classical image processing
+See `notebooks/demo.py` to run the classical pipeline
+
