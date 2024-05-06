@@ -14,8 +14,8 @@ model_types = ['gmm','agg','spectral']
 use_pcas = [True,False]
 dim_red = [2,5,8,12]
 customs = [True, False]
-train_path = "./data/1907French-etal-SDLE-EL-ImageDataSet-forML/train/"
-test_path = "./data/1907French-etal-SDLE-EL-ImageDataSet-forML/test/"
+train_path = "../data/1907French-etal-SDLE-EL-ImageDataSet-forML/train/"
+test_path = "../data/1907French-etal-SDLE-EL-ImageDataSet-forML/test/"
 
 models = []
 
